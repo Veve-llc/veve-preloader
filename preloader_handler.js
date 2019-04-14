@@ -1,8 +1,45 @@
 /*--------------------------------------------------------------------
 * Based On The Fakeloader the event based implementaiton.
+jQuery Plugin:
+
+finally HTML code:
+var loader = $('#fakeLoader'); // show loader.fakeLoader(); // disapear loader.fakeLoader.stop();
+
+$(document).ready(function() {
+  // executes when HTML-Document is loaded and DOM is ready
+  console.log("document is ready");
+});
+
+
+$(window).load(function() {
+  // executes when complete page is fully loaded, including all frames, objects and images
+  console.log("window is loaded");
+});
+
 -----------------------------------------------------------------------*/
 (function ($) {
- 
+    isStop = false; // Default value for stopping mechanism
+
+    var isStop = false; 
+    // console.log(isStop); 
+    
+    $.fn.fakeLoader.stop = function () { 
+        isStop = true; 
+        // console.log('call outside ' + isStop); 
+    };
+
+    // check timeToHide is 0 or not, if 0 mean set interval timer to check 'isStop' value
+    if (settings.timeToHide > 0) { 
+        setTimeout(function () 
+        { $(el).fadeOut(); 
+        }, settings.timeToHide); 
+    } else { 
+        var timer = setInterval(function () { 
+            console.log(isStop); 
+            if (isStop) { $(el).fadeOut(); clearInterval(timer); } 
+        }, 200); 
+    }
+
     $.fn.fakeLoader = function(options) {
 
         //Defaults
@@ -17,7 +54,6 @@
             bgColor: '#E9CE70', // Default background color
             spinner:'spinner6', // Default Spinner
             imagePath:'', // Default Path custom image
-            isStop: false // Default value for stopping mechanism
         }, options);
 
         // Boolean Stopper Value
